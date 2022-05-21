@@ -30,15 +30,17 @@ import (
 func main() {
 	// Client options
 	client := easyclient.NewClient()
+	client.SetFollowRedirects(true)
 	client.SetHeaders(map[string]string{
 		"api-key": "123",
 	})
 	client.SetProxy("http://localhost:1234")
+	client.SetTimeout(10 * time.Second)
 	// Request options
 	res, body, err := client.Do(easyclient.Options{
 		Body: bytes.NewBuffer([]byte(`{"foo":"bar"}`)),
 		Headers: map[string]string{
-			"user-agent": "easy-client-go",
+			"user-agent": "easy-client",
 		},
 		Method:    "POST",
 		ParseBody: true,
