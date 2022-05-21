@@ -1,6 +1,6 @@
-# easy-client-go
+# easy-client
 
-An easy to use Golang HTTP client.
+An easy to use Golang wrapper for the net/http package to perform requests.
 
 ## Features
 
