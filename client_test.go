@@ -17,7 +17,7 @@ func TestDo(t *testing.T) {
 			"foo": "bar",
 		},
 		Headers: map[string]string{
-			"user-agent": "easy-client",
+			"user-agent": "easyclient",
 		},
 		Method:    "GET",
 		ParseBody: true,

@@ -42,7 +42,7 @@ func main() {
 			"foo": "bar",
 		},
 		Headers: map[string]string{
-			"user-agent": "easy-client",
+			"user-agent": "easyclient",
 		},
 		Method:    "GET",
 		ParseBody: true,
