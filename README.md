@@ -1,4 +1,4 @@
-# easy-client
+# easyclient
 
 An easy to use Golang wrapper for the net/http package to perform requests.
 
@@ -18,7 +18,7 @@ An easy to use Golang wrapper for the net/http package to perform requests.
 
 Install:
 ```bash
-go get github.com/etaaa/easy-client
+go get github.com/etaaa/easyclient
 ```
 
 Usage:
@@ -27,7 +27,7 @@ package main
 
 import (
 	"log"
-	"github.com/etaaa/easy-client"
+	"github.com/etaaa/easyclient"
 )
 
 func main() {
