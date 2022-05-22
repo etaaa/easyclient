@@ -23,7 +23,7 @@ type ClientOptions struct {
 	Jar           http.CookieJar       // Set a custom cookiejar. If nil, a new one is created.
 	Proxy         string               // Custom proxy set to the client.
 	Timeout       time.Duration        // Set custom request timeout. If nil, 30 * time.Second is used.
-	Transport     http.RoundTripper    // Set custom transport type. If nil, DefaultTransport is used.
+	Transport     http.RoundTripper    // Set custom transport type. If nil, http.DefaultTransport is used.
 }
 
 type ClientOptionsCookies struct {
@@ -31,7 +31,7 @@ type ClientOptionsCookies struct {
 	Cookies map[string]string // A map of cookies to set.
 }
 
-// RequestOptions specifies details when making a new request via DoRequest.
+// RequestOptions specifies details when making a new request.
 type RequestOptions struct {
 	Body      io.Reader         // Body data to include in the request.
 	Cookies   map[string]string // A map of cookies to set for the request.
@@ -111,7 +111,7 @@ func (c *client) SetProxy(proxy string) error {
 	return nil
 }
 
-// Clears the proxy from the client.
+// Clears the proxy from the client by replacing the http.Transport type.
 func (c *client) ClearProxy() {
 	c.client.Transport = &http.Transport{}
 }
