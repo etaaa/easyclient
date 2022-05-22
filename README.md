@@ -31,13 +31,14 @@ import (
 )
 
 func main() {
-	// Client options
-	client, _ := easyclient.NewClient()
-	client.SetHeaders(map[string]string{
-		"api-key": "123",
+	//  Create client.
+	client, _ := easyclient.NewClient(easyclient.ClientOptions{
+		Headers: map[string]string{
+			"api-key": "123",
+		},
 	})
-	// Request options
-	res, body, _ := client.DoRequest(easyclient.Options{
+	// Create request.
+	res, body, _ := client.Do(easyclient.RequestOptions{
 		Cookies: map[string]string{
 			"foo": "bar",
 		},

@@ -6,13 +6,14 @@ import (
 )
 
 func TestDo(t *testing.T) {
-	// Client options
-	client, _ := NewClient()
-	client.SetHeaders(map[string]string{
-		"api-key": "123",
+	//  Create client.
+	client, _ := NewClient(ClientOptions{
+		Headers: map[string]string{
+			"api-key": "123",
+		},
 	})
-	// Request options
-	res, body, _ := client.DoRequest(Options{
+	// Create request.
+	res, body, _ := client.Do(RequestOptions{
 		Cookies: map[string]string{
 			"foo": "bar",
 		},
