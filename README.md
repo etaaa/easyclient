@@ -6,10 +6,13 @@ An easy to use Golang wrapper for the net/http package to perform requests.
 
 * Auto body closing
 * Auto body parsing
+* Easily set and clear cookies for client
+* Easily set cookies for a single request
 * Ordered headers
-* Set headers for whole client
-* Easy proxy setting for client
-* Easy proxy setting for single request
+* Easily set and clear headers for client
+* Easily set headers for a single request
+* Easily set and clear proxy for client
+* Easily set proxy for a single request
 
 ## Usage
 
@@ -29,27 +32,22 @@ import (
 
 func main() {
 	// Client options
-	client := easyclient.NewClient()
-	client.SetFollowRedirects(true)
+	client, _ := easyclient.NewClient()
 	client.SetHeaders(map[string]string{
 		"api-key": "123",
 	})
-	client.SetProxy("http://localhost:1234")
-	client.SetTimeout(10 * time.Second)
 	// Request options
-	res, body, err := client.Do(easyclient.Options{
-		Body: bytes.NewBuffer([]byte(`{"foo":"bar"}`)),
+	res, body, _ := client.DoRequest(easyclient.Options{
+		Cookies: map[string]string{
+			"foo": "bar",
+		},
 		Headers: map[string]string{
 			"user-agent": "easy-client",
 		},
-		Method:    "POST",
+		Method:    "GET",
 		ParseBody: true,
-		Proxy:     "",
-		URL:       "https://httpbin.org/post",
+		URL:       "https://httpbin.org/headers",
 	})
-	if err != nil {
-		fmt.Println(err)
-	}
 	fmt.Println(res.StatusCode, string(body))
 }
 ```

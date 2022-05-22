@@ -4,6 +4,7 @@ import (
 	"io"
 	"io/ioutil"
 	"net/http"
+	"net/http/cookiejar"
 	"net/url"
 	"time"
 )
@@ -17,11 +18,48 @@ type Client struct {
 // Options specifies details on the request
 type Options struct {
 	Body      io.Reader
+	Cookies   map[string]string
 	Headers   map[string]string
 	Method    string
 	ParseBody bool
 	Proxy     string
 	URL       string
+}
+
+// Returns all cookies set on the client
+func (client *Client) GetCookies(baseURL string) ([]*http.Cookie, error) {
+	urlParsed, err := url.Parse(baseURL)
+	if err != nil {
+		return nil, err
+	}
+	return client.client.Jar.Cookies(urlParsed), nil
+}
+
+// Sets the cookies on the Client type which will be reused on every request
+func (client *Client) SetCookies(_url string, _cookies map[string]string) error {
+	urlParsed, err := url.Parse(_url)
+	if err != nil {
+		return err
+	}
+	var cookies []*http.Cookie
+	for key, value := range _cookies {
+		cookies = append(cookies, &http.Cookie{
+			Name:  key,
+			Value: value,
+		})
+	}
+	client.client.Jar.SetCookies(urlParsed, cookies)
+	return nil
+}
+
+// Clears all cookies on the Client type
+func (client *Client) ClearCookies() error {
+	jar, err := cookiejar.New(nil)
+	if err != nil {
+		return err
+	}
+	client.client.Jar = jar
+	return nil
 }
 
 // Specify if the http.Client type should follow redirects
@@ -69,12 +107,21 @@ func (client *Client) SetTimeout(timeout time.Duration) {
 	client.client.Timeout = timeout
 }
 
+// Sets the transport for the http.Client type
+func (client *Client) SetTransport(transport http.RoundTripper) {
+	client.client.Transport = transport
+}
+
 // Executes the request
-func (client *Client) Do(options Options) (*http.Response, []byte, error) {
+func (client *Client) DoRequest(options Options) (*http.Response, []byte, error) {
 	// Create the request
 	req, err := http.NewRequest(options.Method, options.URL, options.Body)
 	if err != nil {
 		return &http.Response{}, nil, err
+	}
+	// Set cookies from request
+	for key, value := range options.Cookies {
+		req.AddCookie(&http.Cookie{Name: key, Value: value})
 	}
 	// Set headers from Client type
 	for key, value := range client.headers {
@@ -119,13 +166,18 @@ func (client *Client) Do(options Options) (*http.Response, []byte, error) {
 }
 
 // Returns a new Client type
-func NewClient() *Client {
+func NewClient() (*Client, error) {
+	jar, err := cookiejar.New(nil)
+	if err != nil {
+		return &Client{}, err
+	}
 	return &Client{
 		client: &http.Client{
 			CheckRedirect: func(req *http.Request, via []*http.Request) error {
 				return http.ErrUseLastResponse
 			},
+			Jar:     jar,
 			Timeout: 30 * time.Second,
 		},
-	}
+	}, nil
 }
