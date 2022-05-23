@@ -188,14 +188,13 @@ func NewClient(clientOptions ClientOptions) (*client, error) {
 		Timeout: clientOptions.Timeout,
 	}
 	// Create cookiejar by default
-	jar, err := cookiejar.New(nil)
-	if err != nil {
-		return &client{}, err
-	}
 	if clientOptions.Jar == nil {
+		jar, err := cookiejar.New(nil)
+		if err != nil {
+			return &client{}, err
+		}
 		httpClient.Jar = jar
 	}
-
 	// Set default timeout to 30 * time.Second if not specified
 	if clientOptions.Timeout == 0 {
 		httpClient.Timeout = 30 * time.Second
