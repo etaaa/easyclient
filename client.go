@@ -146,6 +146,7 @@ func (c *client) Do(options RequestOptions) (*http.Response, []byte, error) {
 		req.Header.Set(key, value)
 	}
 	// Set request proxy.
+	// This will overwrite the existing transport for the single request.
 	transportBefore := c.client.Transport
 	if options.Proxy != "" {
 		proxyParsed, err := url.Parse(options.Proxy)
@@ -155,8 +156,6 @@ func (c *client) Do(options RequestOptions) (*http.Response, []byte, error) {
 		c.client.Transport = &http.Transport{
 			Proxy: http.ProxyURL(proxyParsed),
 		}
-	} else {
-		c.client.Transport = &http.Transport{}
 	}
 	// Do the actual request.
 	res, err := c.client.Do(req)
@@ -174,7 +173,6 @@ func (c *client) Do(options RequestOptions) (*http.Response, []byte, error) {
 			return &http.Response{}, nil, err
 		}
 		return res, body, err
-
 	}
 	// Return reponse.
 	return res, nil, err
