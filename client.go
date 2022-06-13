@@ -10,7 +10,7 @@ import (
 )
 
 // Client holds a *http.Client type and the specified headers.
-type client struct {
+type Client struct {
 	client  *http.Client
 	headers map[string]string
 }
@@ -43,7 +43,7 @@ type RequestOptions struct {
 }
 
 // Returns all cookies set on the client.
-func (c *client) GetCookies(baseURL string) ([]*http.Cookie, error) {
+func (c *Client) GetCookies(baseURL string) ([]*http.Cookie, error) {
 	urlParsed, err := url.Parse(baseURL)
 	if err != nil {
 		return nil, err
@@ -52,7 +52,7 @@ func (c *client) GetCookies(baseURL string) ([]*http.Cookie, error) {
 }
 
 // Sets cookies on the client which will be reused on every request.
-func (c *client) SetCookies(_url string, _cookies map[string]string) error {
+func (c *Client) SetCookies(_url string, _cookies map[string]string) error {
 	urlParsed, err := url.Parse(_url)
 	if err != nil {
 		return err
@@ -69,7 +69,7 @@ func (c *client) SetCookies(_url string, _cookies map[string]string) error {
 }
 
 // Clears all cookies on the client.
-func (c *client) ClearCookies() error {
+func (c *Client) ClearCookies() error {
 	jar, err := cookiejar.New(nil)
 	if err != nil {
 		return err
@@ -79,7 +79,7 @@ func (c *client) ClearCookies() error {
 }
 
 // Specify if the client should follow redirects.
-func (c *client) SetCheckRedirect(shouldRedirect bool) {
+func (c *Client) SetCheckRedirect(shouldRedirect bool) {
 	if shouldRedirect {
 		c.client.CheckRedirect = func(req *http.Request, via []*http.Request) error {
 			return http.ErrUseLastResponse
@@ -90,17 +90,17 @@ func (c *client) SetCheckRedirect(shouldRedirect bool) {
 }
 
 // Sets headers on the client which will be reused on every request.
-func (c *client) SetHeaders(headers map[string]string) {
+func (c *Client) SetHeaders(headers map[string]string) {
 	c.headers = headers
 }
 
 // Clears all headers on the client.
-func (c *client) ClearHeaders() {
+func (c *Client) ClearHeaders() {
 	c.headers = nil
 }
 
 // Sets a proxy to the client.
-func (c *client) SetProxy(proxy string) error {
+func (c *Client) SetProxy(proxy string) error {
 	proxyParsed, err := url.Parse(proxy)
 	if err != nil {
 		return err
@@ -112,22 +112,22 @@ func (c *client) SetProxy(proxy string) error {
 }
 
 // Clears the proxy from the client by replacing the http.Transport type.
-func (c *client) ClearProxy() {
+func (c *Client) ClearProxy() {
 	c.client.Transport = &http.Transport{}
 }
 
 // Sets the timeout duration for the client.
-func (c *client) SetTimeout(timeout time.Duration) {
+func (c *Client) SetTimeout(timeout time.Duration) {
 	c.client.Timeout = timeout
 }
 
 // Sets the transport for the client.
-func (c *client) SetTransport(transport http.RoundTripper) {
+func (c *Client) SetTransport(transport http.RoundTripper) {
 	c.client.Transport = transport
 }
 
 // Executes the request.
-func (c *client) Do(options RequestOptions) (*http.Response, []byte, error) {
+func (c *Client) Do(options RequestOptions) (*http.Response, []byte, error) {
 	// Create the request.
 	req, err := http.NewRequest(options.Method, options.URL, options.Body)
 	if err != nil {
@@ -179,7 +179,7 @@ func (c *client) Do(options RequestOptions) (*http.Response, []byte, error) {
 }
 
 // Returns a new Client type
-func NewClient(clientOptions ClientOptions) (*client, error) {
+func NewClient(clientOptions ClientOptions) (*Client, error) {
 	// Create new http.Client
 	httpClient := &http.Client{
 		Jar:     clientOptions.Jar,
@@ -189,7 +189,7 @@ func NewClient(clientOptions ClientOptions) (*client, error) {
 	if clientOptions.Jar == nil {
 		jar, err := cookiejar.New(nil)
 		if err != nil {
-			return &client{}, err
+			return &Client{}, err
 		}
 		httpClient.Jar = jar
 	}
@@ -202,7 +202,7 @@ func NewClient(clientOptions ClientOptions) (*client, error) {
 		httpClient.Transport = clientOptions.Transport
 	}
 	// Create client instance
-	c := &client{
+	c := &Client{
 		client:  httpClient,
 		headers: clientOptions.Headers,
 	}
@@ -213,12 +213,12 @@ func NewClient(clientOptions ClientOptions) (*client, error) {
 	// Set proxy from string
 	if clientOptions.Proxy != "" {
 		if err := c.SetProxy(clientOptions.Proxy); err != nil {
-			return &client{}, err
+			return &Client{}, err
 		}
 	}
 	// Set cookies
 	if err := c.SetCookies(clientOptions.Cookies.BaseURL, clientOptions.Cookies.Cookies); err != nil {
-		return &client{}, err
+		return &Client{}, err
 	}
 	// Return client.
 	return c, nil
