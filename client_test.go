@@ -8,7 +8,7 @@ import (
 func TestDo(t *testing.T) {
 	//  Create client.
 	client, _ := NewClient(ClientOptions{
-		Headers: map[string]string{ // Default headers. Will persist on every request with this client
+		Headers: map[string]string{ // Default headers. Will persist on every request made with this client.
 			"api-key": "123",
 		},
 	})

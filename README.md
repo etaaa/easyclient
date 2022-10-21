@@ -33,7 +33,7 @@ import (
 func main() {
 	//  Create client.
 	client, _ := easyclient.NewClient(easyclient.ClientOptions{
-		Headers: map[string]string{ // Default headers. Will persist on every request with this client
+		Headers: map[string]string{ // Default headers. Will persist on every request made with this client.
 			"api-key": "123",
 		},
 	})
