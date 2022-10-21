@@ -33,7 +33,7 @@ import (
 func main() {
 	//  Create client.
 	client, _ := easyclient.NewClient(easyclient.ClientOptions{
-		Headers: map[string]string{
+		Headers: map[string]string{ // Default headers. Will persist on every request with this client
 			"api-key": "123",
 		},
 	})
@@ -42,7 +42,7 @@ func main() {
 		Cookies: map[string]string{
 			"foo": "bar",
 		},
-		Headers: map[string]string{
+		Headers: map[string]string{ // Request headers. Only will be set for this request.
 			"user-agent": "easyclient",
 		},
 		Method:    "GET",

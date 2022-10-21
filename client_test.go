@@ -8,7 +8,7 @@ import (
 func TestDo(t *testing.T) {
 	//  Create client.
 	client, _ := NewClient(ClientOptions{
-		Headers: map[string]string{
+		Headers: map[string]string{ // Default headers. Will persist on every request with this client
 			"api-key": "123",
 		},
 	})
@@ -17,7 +17,7 @@ func TestDo(t *testing.T) {
 		Cookies: map[string]string{
 			"foo": "bar",
 		},
-		Headers: map[string]string{
+		Headers: map[string]string{ // Request headers. Only will be set for this request.
 			"user-agent": "easyclient",
 		},
 		Method:    "GET",
