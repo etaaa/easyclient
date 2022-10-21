@@ -79,7 +79,7 @@ func (c *Client) ClearCookies() error {
 }
 
 // Specify if the client should follow redirects.
-func (c *Client) SetCheckRedirect(shouldRedirect bool) {
+func (c *Client) SetRedirects(shouldRedirect bool) {
 	if shouldRedirect {
 		c.client.CheckRedirect = func(req *http.Request, via []*http.Request) error {
 			return http.ErrUseLastResponse
@@ -149,12 +149,8 @@ func (c *Client) Do(options RequestOptions) (*http.Response, []byte, error) {
 	// This will overwrite the existing transport for the single request.
 	transportBefore := c.client.Transport
 	if options.Proxy != "" {
-		proxyParsed, err := url.Parse(options.Proxy)
-		if err != nil {
+		if err := c.SetProxy(options.Proxy); err != nil {
 			return &http.Response{}, nil, err
-		}
-		c.client.Transport = &http.Transport{
-			Proxy: http.ProxyURL(proxyParsed),
 		}
 	}
 	// Do the actual request.
@@ -208,7 +204,7 @@ func NewClient(clientOptions ClientOptions) (*Client, error) {
 	}
 	// Set checkRedirect
 	if !clientOptions.CheckRedirect {
-		c.SetCheckRedirect(false)
+		c.SetRedirects(false)
 	}
 	// Set proxy from string
 	if clientOptions.Proxy != "" {
