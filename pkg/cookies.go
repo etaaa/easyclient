@@ -12,37 +12,37 @@ type ClientOptionsCookies struct {
 }
 
 // Sets cookies on the client which will be reused on every request.
-func (c *Client) SetCookies(_url string, _cookies map[string]string) error {
-	urlParsed, err := url.Parse(_url)
+func (c *Client) SetCookies(URL string, cookieMap map[string]string) error {
+	parsedURL, err := url.Parse(URL)
 	if err != nil {
 		return err
 	}
 	var cookies []*http.Cookie
-	for key, value := range _cookies {
+	for name, value := range cookieMap {
 		cookies = append(cookies, &http.Cookie{
-			Name:  key,
+			Name:  name,
 			Value: value,
 		})
 	}
-	c.client.Jar.SetCookies(urlParsed, cookies)
+	c.client.Jar.SetCookies(parsedURL, cookies)
 	return nil
 }
 
 // Clears all cookies on the client.
 func (c *Client) ClearCookies() error {
-	jar, err := cookiejar.New(nil)
+	var err error
+	c.client.Jar, err = cookiejar.New(nil)
 	if err != nil {
 		return err
 	}
-	c.client.Jar = jar
 	return nil
 }
 
 // Returns all cookies set on the client.
 func (c *Client) GetCookies(baseURL string) ([]*http.Cookie, error) {
-	urlParsed, err := url.Parse(baseURL)
+	parsedURL, err := url.Parse(baseURL)
 	if err != nil {
 		return nil, err
 	}
-	return c.client.Jar.Cookies(urlParsed), nil
+	return c.client.Jar.Cookies(parsedURL), nil
 }

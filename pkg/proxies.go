@@ -17,7 +17,7 @@ func (c *Client) SetProxy(proxy string) error {
 	return nil
 }
 
-// Clears the proxy from the client by replacing the http.Transport type.
+// Clears the proxy from the client. Warning: This will overwrite the existing transport.
 func (c *Client) ClearProxy() {
 	c.client.Transport = &http.Transport{}
 }

@@ -22,9 +22,9 @@ func TestDo(t *testing.T) {
 		Headers: map[string]string{
 			"user-agent": "easyclient",
 		},
-		Method:    "GET",
-		ParseBody: true,
-		URL:       "https://httpbin.org/headers",
+		Method:           "GET",
+		ReadResponseBody: true,
+		URL:              "https://httpbin.org/headers",
 	})
 	fmt.Print(res.StatusCode, string(body))
 }

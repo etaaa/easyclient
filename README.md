@@ -47,11 +47,11 @@ func main() {
 		Headers: map[string]string{
 			"user-agent": "easyclient",
 		},
-		Method:    "GET",
-		ParseBody: true,
-		URL:       "https://httpbin.org/headers",
+		Method:           "GET",
+		ReadResponseBody: true,
+		URL:              "https://httpbin.org/headers",
 	})
-	fmt.Println(res.StatusCode, string(body))
+	fmt.Print(res.StatusCode, string(body))
 }
 ```
 
