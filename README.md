@@ -31,18 +31,20 @@ import (
 )
 
 func main() {
-	//  Create client.
+	// Create a new client.
 	client, _ := easyclient.NewClient(easyclient.ClientOptions{
-		Headers: map[string]string{ // Default headers. Will persist on every request made with this client.
+		// Options specified here will persist for every request made with this client.
+		Headers: map[string]string{
 			"api-key": "123",
 		},
 	})
-	// Create request.
+	// Execute a request with the created client.
 	res, body, _ := client.Do(easyclient.RequestOptions{
+		// Options specified here will only be applied for the current request.
 		Cookies: map[string]string{
 			"foo": "bar",
 		},
-		Headers: map[string]string{ // Request headers. Only will be set for this request.
+		Headers: map[string]string{
 			"user-agent": "easyclient",
 		},
 		Method:    "GET",
@@ -52,9 +54,6 @@ func main() {
 	fmt.Println(res.StatusCode, string(body))
 }
 ```
-
-## Questions
-For any questions feel free to add and DM me on Discord (eta#1656).
 
 ## Contributing
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change. Please make sure to update tests as appropriate.

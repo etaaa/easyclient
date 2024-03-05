@@ -6,23 +6,25 @@ import (
 )
 
 func TestDo(t *testing.T) {
-	//  Create client.
+	// Create a new client.
 	client, _ := NewClient(ClientOptions{
-		Headers: map[string]string{ // Default headers. Will persist on every request made with this client.
+		// Options specified here will persist for every request made with this client.
+		Headers: map[string]string{
 			"api-key": "123",
 		},
 	})
-	// Create request.
+	// Execute a request with the created client.
 	res, body, _ := client.Do(RequestOptions{
+		// Options specified here will only be applied for the current request.
 		Cookies: map[string]string{
 			"foo": "bar",
 		},
-		Headers: map[string]string{ // Request headers. Only will be set for this request.
+		Headers: map[string]string{
 			"user-agent": "easyclient",
 		},
 		Method:    "GET",
 		ParseBody: true,
 		URL:       "https://httpbin.org/headers",
 	})
-	fmt.Println(res.StatusCode, string(body))
+	fmt.Print(res.StatusCode, string(body))
 }
