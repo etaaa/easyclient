@@ -1,27 +1,17 @@
 # easyclient
-
-An easy to use Golang wrapper for the net/http package to perform requests.
-
+An easy to use wrapper for the net/http package to perform network requests with Golang.
 ## Features
-
-* Auto body closing
-* Auto body parsing
-* Easily set and clear cookies for client
-* Easily set cookies for a single request
-* Ordered headers
-* Easily set and clear headers for client
-* Easily set headers for a single request
-* Easily set and clear proxy for client
-* Easily set proxy for a single request
-
+* Automatically response body reading and closing
+* Easily set cookies for a single request or the client session
+* Easily set headers for a single request or the client session
+* Easily set proxy for a single request or the client session
+* ...
 ## Usage
-
-Install:
+Installation:
 ```bash
 go get github.com/etaaa/easyclient
 ```
-
-Usage:
+Implementation example:
 ```go
 package main
 
@@ -54,9 +44,7 @@ func main() {
 	fmt.Print(res.StatusCode, string(body))
 }
 ```
-
 ## Contributing
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change. Please make sure to update tests as appropriate.
-
 ## License
 [MIT](https://choosealicense.com/licenses/mit/)
