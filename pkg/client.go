@@ -7,30 +7,30 @@ import (
 	"time"
 )
 
-// Holds a *http.Client and the specified headers as those can't be saved on the client session directly.
+// Custom client type. Prevents all http.Client methods/properties to be accessible from outside.
 type Client struct {
-	client  *http.Client
-	headers map[string]string
+	client  *http.Client      // Private variable client as not all methods/properties should be accessible.
+	headers map[string]string // Headers can't be stored on the *http.Client directly so we store them here.
 }
 
 // Specifies default values when creating a new Client.
 type ClientOptions struct {
-	Cookies         ClientOptionsCookies // Custom cookies set on the client.
-	FollowRedirects bool                 // If true, the client will follow redirects.
-	Headers         map[string]string    // Custom headers set to the client.
-	Proxy           string               // Custom proxy set to the client.
-	Timeout         time.Duration        // Set custom request timeout. If nil, 30 * time.Second is used.
-	Transport       http.RoundTripper    // Set custom transport type. If nil, http.DefaultTransport is used.
+	Cookies         ClientOptionsCookies // Custom cookies which will be used on every request performed with this client for the given BaseURL.
+	FollowRedirects bool                 // Whether the client should follow redirects or not.
+	Headers         map[string]string    // Custom headers which will be used on every request performed with this client.
+	Proxy           string               // Custom proxy which will be used on every request performed with this client.
+	Timeout         time.Duration        // Timeout for when the request should be aborted if there is no response in that time. If nil, 30 * time.Second is used.
+	Transport       http.RoundTripper    // Custom transport type. If nil, http.DefaultTransport is used.
 }
 
 // RequestOptions specifies details when making a new request.
 type RequestOptions struct {
-	Body             io.Reader         // Body data to include in the request.
-	Cookies          map[string]string // A map of cookies to set for the request.
-	Headers          map[string]string // A map of headers to set for the request.
-	Method           string            // The HTTP-Method.
-	ReadResponseBody bool              // Whether the response.Body should be parsed or not.
-	Proxy            string            // Custom proxy for the request.
+	Body             io.Reader         // Body to include in the request.
+	Cookies          map[string]string // Custom cookies which will be used for this request.
+	Headers          map[string]string // Custom headers which will be used for this request.
+	Method           string            // The HTTP-Method. See https://pkg.go.dev/net/http#pkg-constants for all available methods.
+	ReadResponseBody bool              // Whether the response.Body should be read or not.
+	Proxy            string            // Custom proxy which will be used for this request.
 	URL              string            // URL to perform the request on.
 }
 
